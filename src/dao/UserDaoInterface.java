@@ -9,7 +9,7 @@ public interface UserDaoInterface {
 	public ArrayList<User> getAllUsers() throws SQLException;
 
 	// method to get a specific contact
-	public ArrayList<User> getUsergetUserByName() throws SQLException;
+	public ArrayList<User> getUserByName() throws SQLException;
 
 	// method to update a specific contact
 	public void changeUser(User user) throws SQLException;

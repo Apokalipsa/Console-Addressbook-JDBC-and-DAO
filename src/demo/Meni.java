@@ -144,7 +144,7 @@ public class Meni {
 			break;
 		}
 		case 2: {// search individual contacts
-			ArrayList<User> individualC = user.getUsergetUserByName();
+			ArrayList<User> individualC = user.getUserByName();
 
 			for (User contact : individualC) {
 				user.printUser(contact);

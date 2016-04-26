@@ -218,7 +218,7 @@ public class UserDAO implements UserDaoInterface {
 	}
 
 	@Override
-	public ArrayList<User> getUsergetUserByName() throws SQLException {
+	public ArrayList<User> getUserByName() throws SQLException {
 		ArrayList<User> user = new ArrayList<>();
 
 		java.util.Scanner input = new java.util.Scanner(System.in);
