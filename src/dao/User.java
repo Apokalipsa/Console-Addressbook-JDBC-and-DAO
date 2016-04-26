@@ -1,8 +1,5 @@
 package dao;
 
-import java.sql.SQLException;
-import java.util.Scanner;
-
 public class User {
 
 	private int id;
@@ -113,56 +110,5 @@ public class User {
 		return "User [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", username=" + username
 				+ ", password=" + password + ", phoneNumber=" + phoneNumber + ", address=" + address + ", city=" + city
 				+ ", isAdmin=" + isAdmin + "]";
-	}
-
-	public static void userMenu(User currentUser) throws SQLException {
-
-		System.out.println("\n******* Welcome to my addressbook console program *******\n");
-		System.out.println("Chose the option\n");
-		System.out.println("Option 0:  Log out.");
-		System.out.println("Option 1:  Show all contacts.");
-		System.out.println("Option 2:  Search individual contact.");
-
-		Scanner userInput = new Scanner(System.in);
-		int userChoice = 0;
-		try {
-			userChoice = userInput.nextInt();
-		} catch (Exception e) {
-			System.out.println("Ups wrong input, please enter option number.");
-			userMenu(currentUser);
-			userInput.close();
-		}
-		switch (userChoice) {
-		case 0: {// log out
-			System.out.println("Bye...");
-		
-			UserDAO.loginMenu();
-
-		}
-		case 1: { // Show all contact list
-
-			try {
-				
-
-			} catch (Exception ex) {
-				System.out.println("Ups! Something went wrong. Please try again latter");
-				userMenu(currentUser);
-			}
-			
-			userMenu(currentUser);
-			break;
-
-		}
-		case 2: {// search individual contacts
-
-			userMenu(currentUser);
-
-			break;
-		}
-		default: {
-			System.out.println("Unijeli ste pogresnu vrijednost!");
-			userMenu(currentUser);
-		}
-		}
 	}
 }

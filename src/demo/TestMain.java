@@ -1,12 +1,15 @@
-package org.dijana;
+package demo;
 
 import java.sql.SQLException;
 
-import dao.UserDAO;
+
+
+
 
 public class TestMain {
 	public static void main(String[] args) throws SQLException {
-		UserDAO.loginMenu();
+		Meni.loginMenu();
+		
 
 	}
 
