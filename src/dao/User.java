@@ -12,16 +12,17 @@ public class User {
 	private String city;
 	private int isAdmin;
 
-	/**
-	 * no-arg constructor
-	 */
+	
+	 // no-arg constructor
+	 
 	public User() {
 
 	}
 
+	// constructor for database comunication
 	public User(int id, String firstName, String lastName, String username, String password, String phoneNumber,
 			String address, String city, int isAdmin) {
-		super();
+
 		this.id = id;
 		this.firstName = firstName;
 		this.lastName = lastName;
@@ -31,6 +32,20 @@ public class User {
 		this.address = address;
 		this.city = city;
 		this.isAdmin = isAdmin;
+	}
+
+	// constructor for creation new user into database
+	public User(String firstName, String lastName, String username, String password, String phoneNumber, String address,
+			String city, int isAdmin) {
+
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.username = username;
+		this.password = password;
+		this.phoneNumber = phoneNumber;
+		this.address = address;
+		this.city = city;
+		this.isAdmin = 0;
 	}
 
 	public int getId() {

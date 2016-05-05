@@ -1,4 +1,4 @@
-package demo;
+package dao;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -9,17 +9,12 @@ public class ConnectionManager {
 	private static ConnectionManager instance = null;
 
 	private final String USERNAME = "root";
-	private final String PASSWORD = "";
+	private final String PASSWORD = "root";
 	private final String CONN_STRING = "jdbc:mysql://localhost/imenik";
-	private static final String PASS = "root";
 
 	private Connection connection = null;
 
 	private ConnectionManager() {
-	}
-
-	public static String getPass() {
-		return PASS;
 	}
 
 	public static ConnectionManager getInstance() {

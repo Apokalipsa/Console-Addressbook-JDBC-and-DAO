@@ -9,20 +9,22 @@ public interface UserDaoInterface {
 	public ArrayList<User> getAllUsers() throws SQLException;
 
 	// method to get a specific contact
-	public ArrayList<User> getUserByName() throws SQLException;
+	public ArrayList<User> getUserByName(String name) throws SQLException;
 
 	// method to update a specific contact
 	public void changeUser(User user) throws SQLException;
 
 	// method to delete a specific contact
-	public void deleteUser(User user) throws SQLException;
 
-	// method to add a contact
-	public void addUser() throws SQLException;
+
 	
 	public User getUser(int id) throws SQLException;
 
-	// method to print a specific contact
-	public void printUser(User user);
+	
+	public User login(String username, String password) throws SQLException;
+
+	void addUser(User user) throws SQLException;
+
+	void deleteUser(int id) throws SQLException;
 
 }

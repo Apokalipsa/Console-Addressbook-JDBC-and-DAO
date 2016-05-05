@@ -7,8 +7,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
-import demo.ConnectionManager;
-import demo.Meni;
 
 public class UserDAO implements UserDaoInterface {
 
@@ -16,7 +14,6 @@ public class UserDAO implements UserDaoInterface {
 
 	@Override
 	public ArrayList<User> getAllUsers() throws SQLException {
-		
 
 		ArrayList<User> user = new ArrayList<>();
 
@@ -24,16 +21,14 @@ public class UserDAO implements UserDaoInterface {
 
 		ResultSet rs = null;
 
-		
-				try(Statement statement = connection.createStatement()) {
-					rs = statement.executeQuery(query);
+		try (Statement statement = connection.createStatement()) {
+			rs = statement.executeQuery(query);
 
 			while (rs.next()) {
 				user.add(new User(rs.getInt("id"), rs.getString("firstName"), rs.getString("lastName"),
 						rs.getString("username"), rs.getString("password"), rs.getString("phoneNumber"),
 						rs.getString("address"), rs.getString("city"), rs.getInt("isAdmin")));
 
-				
 			}
 
 		}
@@ -41,20 +36,20 @@ public class UserDAO implements UserDaoInterface {
 		return user;
 	}
 
-	
-
 	public User getUser(int id) throws SQLException {
-		User user = null;		
+		
+		User user = null;
+		
 		String query = "SELECT * FROM kontakti WHERE id = ?";
-		
+
 		ResultSet rs = null;
-		
-		try(PreparedStatement prepared = connection.prepareStatement(query);) {
+
+		try (PreparedStatement prepared = connection.prepareStatement(query);) {
 			prepared.setInt(1, id);
-			
+
 			rs = prepared.executeQuery();
-			
-			if(rs.next()){
+
+			if (rs.next()) {
 				user = new User(rs.getInt("id"), rs.getString("firstName"), rs.getString("lastName"),
 						rs.getString("username"), rs.getString("password"), rs.getString("phoneNumber"),
 						rs.getString("address"), rs.getString("city"), rs.getInt("isAdmin"));
@@ -62,55 +57,28 @@ public class UserDAO implements UserDaoInterface {
 				System.out.println("Ne postoji u bazi!");
 			}
 		}
-		
+
 		return user;
 	}
 
 	@Override
-	public void changeUser(User user) throws SQLException {
+	public void changeUser(User user) throws SQLException { // vratiti tamo sve
+															// tamou
 		if (user != null) {
 
 			String query = "UPDATE kontakti SET  firstName = ?, lastName = ?, username = ?, password = ?, phoneNumber = ?, address = ?, city = ?, isAdmin= ? WHERE id = ?";
-			java.util.Scanner input = new java.util.Scanner(System.in);
-			Meni.loginMenu();
-			printUser(user);
-			System.out.print("Enter user first name: ");
-			String firstName = input.next();
-
-			System.out.print("Enter user last name: ");
-			String lastName = input.next();
-
-			System.out.print("Enter user username): ");
-			String username = input.next();
-
-			System.out.print("Enter user password: ");
-			String password = input.next();
-
-			System.out.print("Enter user phoneNumber): ");
-			String phoneNumber = input.next();
-
-			System.out.print("Enter user address: ");
-			String address = input.next();
-
-			System.out.print("Enter user city): ");
-			String city = input.next();
-
-			System.out.print("Enter user isAdmin: ");
-			int isAdmin = input.nextInt();
-
-			input.close();
 
 			try (PreparedStatement stmnt = connection.prepareStatement(query);) {
 
-				stmnt.setString(1, firstName);
-				stmnt.setString(2, lastName);
-				stmnt.setString(2, firstName);
-				stmnt.setString(4, username);
-				stmnt.setString(5, password);
-				stmnt.setString(6, phoneNumber);
-				stmnt.setString(7, address);
-				stmnt.setString(8, city);
-				stmnt.setInt(9, isAdmin);
+				stmnt.setString(1, user.getFirstName());
+				stmnt.setString(2, user.getLastName());
+				stmnt.setString(3, user.getUsername());
+				stmnt.setString(4, user.getPassword());
+				stmnt.setString(5, user.getPhoneNumber());
+				stmnt.setString(6, user.getAddress());
+				stmnt.setString(7, user.getCity());
+				stmnt.setInt(8, user.getIsAdmin());
+				stmnt.setInt(9, user.getId());
 				stmnt.executeUpdate();
 
 				System.out.println("User updated in the database.");
@@ -119,115 +87,52 @@ public class UserDAO implements UserDaoInterface {
 	}
 
 	@Override
-	public void deleteUser(User user) throws SQLException {
-		if (user != null) {
+	public void deleteUser(int id) throws SQLException {
 
-			String query = "DELETE FROM kontakti WHERE id = ?";
+		String query = "DELETE FROM kontakti WHERE id = ?";
 
-			try (PreparedStatement statement = connection.prepareStatement(query);) {
+		try (PreparedStatement statement = connection.prepareStatement(query);) {
 
-				statement.setInt(1, user.getId());
-				java.util.Scanner input = new java.util.Scanner(System.in);
+			statement.setInt(1, id);
 
-				Meni.loginMenu();
-				printUser(user);
-				System.out.println("Are You Sure: (Y/N):");
-				String chose = input.next();
-				if (chose.startsWith("Y") || chose.startsWith("y")) {
-					statement.executeUpdate();
-					input.close();
+			statement.executeUpdate();
 
-					System.out.println("User deleted from the database.");
-				} else
-					System.out.println("Decline!");
+		} catch (SQLException e) {
+			System.err.println(e);
 
-			} catch (SQLException e) {
-				System.err.println(e);
-				
-			}
-			
 		}
-		
+
 	}
 
 	@Override
-	public void addUser() throws SQLException {
+	public void addUser(User user) throws SQLException {
 
-		String query = "INSERT INTO kontakti(id,firstName, lastName, username, password, phoneNumber, address , city  VALUES (?,?,?,?,?,?,?,?,?)";
+		String query = "INSERT INTO kontakti(firstName, lastName, username, password, phoneNumber, address , city, isAdmin )  VALUES (?,?,?,?,?,?,?,?)";
 
-		java.util.Scanner input = new java.util.Scanner(System.in);
+		try (PreparedStatement stmnt = connection.prepareStatement(query);) {
 
-		System.out.print("Enter user first name: ");
-		String firstName = input.next();
-
-		System.out.print("Enter user last name: ");
-		String lastName = input.next();
-
-		System.out.print("Enter user username): ");
-		String username = input.next();
-
-		System.out.print("Enter user password: ");
-		String password = input.next();
-
-		System.out.print("Enter user phoneNumber): ");
-		String phoneNumber = input.next();
-
-		System.out.print("Enter user address: ");
-		String address = input.next();
-
-		System.out.print("Enter user city): ");
-		String city = input.next();
-
-		System.out.print("Enter user isAdmin: ");
-		int isAdmin = input.nextInt();
-
-		input.close();
-
-		try (
-
-				PreparedStatement stmnt = connection.prepareStatement(query);) {
-
-			stmnt.setString(1, firstName);
-			stmnt.setString(2, lastName);
-			stmnt.setString(2, firstName);
-			stmnt.setString(4, username);
-			stmnt.setString(5, password);
-			stmnt.setString(6, phoneNumber);
-			stmnt.setString(7, address);
-			stmnt.setString(8, city);
-			stmnt.setInt(9, isAdmin);
+			stmnt.setString(1, user.getFirstName());
+			stmnt.setString(2, user.getLastName());
+			stmnt.setString(3, user.getUsername());
+			stmnt.setString(4, user.getPassword());
+			stmnt.setString(5, user.getPhoneNumber());
+			stmnt.setString(6, user.getAddress());
+			stmnt.setString(7, user.getCity());
+			stmnt.setInt(8, user.getIsAdmin());
 			stmnt.executeUpdate();
 
-			System.out.println("User added to the database.");
 		}
 
 	}
 
 	@Override
-	public void printUser(User user) {
-		if (user != null) {
-			System.out.println("id: " + user.getId() + ", First Name: " + user.getFirstName() + ", Last Name: "
-					+ user.getLastName() + ", Username: " + user.getUsername() + ", Password: " + user.getPassword()
-					+ ", Phone Number: " + user.getPhoneNumber() + ", Address: " + user.getAddress() + ", City: "
-					+ user.getCity() + ", Is User Admin: " + user.getIsAdmin()
-
-			);
-		} else {
-			System.out.println("No user to print.");
-		}
-	}
-
-	@Override
-	public ArrayList<User> getUserByName() throws SQLException {
+	public ArrayList<User> getUserByName(String name) throws SQLException {
+		
 		ArrayList<User> user = new ArrayList<>();
-
-		java.util.Scanner input = new java.util.Scanner(System.in);
 
 		String query = "SELECT * FROM kontakti WHERE firstName = ?";
 
 		ResultSet rs = null;
-		System.out.println("Enter a name for your search:");
-		String name = input.next();
 
 		try (PreparedStatement statement = connection.prepareStatement(query);) {
 
@@ -235,15 +140,14 @@ public class UserDAO implements UserDaoInterface {
 
 			rs = statement.executeQuery();
 
-			if (rs.next()) {
+			while (rs.next()) {
 
 				user.add(new User(rs.getInt("id"), rs.getString("firstName"), rs.getString("lastName"),
 						rs.getString("username"), rs.getString("password"), rs.getString("phoneNumber"),
 						rs.getString("address"), rs.getString("city"), rs.getInt("isAdmin")));
 
-				rs.close();
 			}
-			input.close();
+			rs.close();
 		}
 
 		return user;
@@ -251,6 +155,28 @@ public class UserDAO implements UserDaoInterface {
 	}
 
 	
+	@Override
+	public User login(String username, String password) throws SQLException {
+
+		User user = null;
+
+		String query = "SELECT * FROM kontakti WHERE userName = ? AND password = ?";
+		
+		try (PreparedStatement statement = connection.prepareStatement(query);) {
+			statement.setString(1, username);
+			statement.setString(2, password);
+
+			try (ResultSet rs = statement.executeQuery()) {
+				
+				if (rs.next()) {
+					user = new User(rs.getInt("id"), rs.getString("firstName"), rs.getString("lastName"),
+							rs.getString("username"), rs.getString("password"), rs.getString("phoneNumber"),
+							rs.getString("address"), rs.getString("city"), rs.getInt("isAdmin"));
+				}
+			}
+		}
+		return user;
+
 	}
 
-
+}
